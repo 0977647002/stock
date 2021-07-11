@@ -1,11 +1,9 @@
-var categoryDAO = require('../dao/categoryDAO');
+const categoryDAO = require("../dao/categoryDAO");
+const experss = require('express');
+const Router = experss.Router();
 
-module.exports = (app) => {
-    app.get('/api/category', async(req, res) => {
-        res.send(await categoryDAO.findAll())
-    });
+Router.get("/", async (req, res) => {
+    res.send(await categoryDAO.findAll());
+});
 
-    app.get('/api/category/:id', async(req, res) => {
-        // do something
-    });
-}
+module.exports = Router;

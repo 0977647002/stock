@@ -1,58 +1,55 @@
-var jwt = require('../jwt/jwt');
-var userDAO = require('../dao/userDAO');
-var md5 = require('md5');
+var jwt = require("../jwt/jwt");
+var userDAO = require("../dao/userDAO");
+var md5 = require("md5");
 
-const key_secret = process.env.ACCESS_TOKEN_SECRET || 'huyhuy';
+const key_secret = process.env.ACCESS_TOKEN_SECRET || "huyhuy";
 const tokenLife = process.env.ACCESS_TOKEN_LIFE || "1h";
 
-exports.login = async(req, res) => {
+const login = async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    var data = await userDAO.findByUsername(username);
+    if (!data) {
+      res.status(500).send({ message: "Username or password is fail" });
+      return;
+    }
+
+    if (!(md5(password) == data[0].password)) {
+      res.status(500).send({ message: "Username or password is fail" });
+      return;
+    }
+
+    let token = await jwt.generateToken(username, key_secret, tokenLife);
+    res.status(200).send({ message: "success", data: { token, username } });
+  } catch (err) {
+    res.status(500).send({ message: "login fail" });
+  }
+};
+
+const verifyToken = async (req, res, next) => {
+  let token = req.headers.authorization;
+  if (token) {
+    token.split(" ");
+    token = token.split(" ")[1];
     try {
-        var data = await userDAO.findByUsername(req.body.username);
-        if (!data) {
-            res.redirect('/login');
-        }
-
-        if (!(md5(req.body.password) == data[0].password)) {
-            res.redirect('/login');
-        }
-
-        req.session.user = {
-            name: data[0].username,
-            role: data[0].name,
-            id: data[0].id
-        };
-        let token = await jwt.generateToken(req.session.user, key_secret, tokenLife);
-        res.cookie('token', token, { maxAge: 100 * 60 * 60 * 24 });
-        res.redirect('/');
+      const decoded = await jwt.verifyToken(token, key_secret);
+      req.jwt = decoded;
+      next();
     } catch {
-        res.redirect('/login');
+      return res.status(500).send({
+        message: "Unauthorized",
+      });
     }
+  } else {
+    return res.status(500).send({
+      message: "not be user!",
+    });
+  }
 };
 
-exports.authentication = (req, res, next) => {
-    var user = req.session.user;
-    if (!user) {
-        res.redirect('/login');
-    } else {
-        next();
-    }
+const authentication = {
+  login,
+  verifyToken,
 };
 
-exports.verifyToken = async(req, res, next) => {
-    const token = req.body.token || req.query.token || req.headers["x-access-token"] || req.cookies.token;
-    if (token) {
-        try {
-            const decoded = await jwt.verifyToken(token, key_secret);
-            req.jwt = decoded;
-            next();
-        } catch {
-            return res.status(401).send({
-                message: 'Unauthorized'
-            })
-        }
-    } else {
-        return res.status(403).send({
-            message: 'not be user!'
-        });
-    }
-}
+module.exports = authentication;

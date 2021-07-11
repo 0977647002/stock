@@ -1,0 +1,32 @@
+POST  http://localhost:8080/api/login HTTP/1.1
+content-type: application/json
+
+{
+    "username": "0977647002",
+    "password": "123456"
+}
+
+###
+
+POST  http://localhost:8080/api/verify-token HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjA5Nzc2NDcwMDIiLCJpYXQiOjE2MjU2NTIwNjcsImV4cCI6MTYyNTY1NTY2N30.vvRJQ33gw7EHed4B2Xk-7-fndu2Z0fqncKlvMsEGzQM
+
+###
+
+GET http://localhost:8080/api/user/stock/0977647002 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjA5Nzc2NDcwMDIiLCJpYXQiOjE2MjU2NTIwNjcsImV4cCI6MTYyNTY1NTY2N30.vvRJQ33gw7EHed4B2Xk-7-fndu2Z0fqncKlvMsEGzQM
+
+
+###
+POST http://localhost:8080/api/user/stock/add HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjA5Nzc2NDcwMDIiLCJpYXQiOjE2MjI5NDUzNzIsImV4cCI6MTYyMjk0ODk3Mn0.0DuNxkPpTNLhnb-ezv8t6pH_dXG4HD4DQFm9AeICU54
+
+{
+    "username": "0977647002",
+    "nameStock":"ABC"
+}
+
+###
+GET http://localhost:8080/api/category HTTP/1.1
