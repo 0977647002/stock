@@ -21,7 +21,7 @@ app.use(
 app.use(cors());
 
 app.use(cookie());
-app.use(express.json()); // support json encoded bodies
+app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/category", categoryRouter);
