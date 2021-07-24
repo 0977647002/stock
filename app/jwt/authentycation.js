@@ -31,7 +31,7 @@ const signin = async (req, res) => {
     try {
         let data = await userDAO.findByUsername(username);
         if (data) {
-            res.status(500).send({ message: "User was exist" });
+            res.status(500).send({ message: "User exist" });
             return;
         }
 
