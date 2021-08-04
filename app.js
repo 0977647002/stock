@@ -17,11 +17,12 @@ app.use("/api/stock", stockRouter);
 app.use("/api", loginRouter);
 app.use("/api/user/stock", userStockRouter);
 
-const PORT = process.env.SERVER_PORT || 8080;
-// ddhasdksa
+const PORT = process.env.PORT || 8080;
+
 app.listen(PORT, function (err) {
-    console.log("Server start, port: " + PORT);
-    if (err) {
-        console.log(err);
-    }
+  console.log("Server start, port: " + PORT);
+  if (err) {
+    console.log(err);
+  }
 });
+

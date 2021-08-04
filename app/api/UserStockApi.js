@@ -44,7 +44,6 @@ Router.post("/update", async (req, res) => {
     res.status(200).send({ message: "update thành công!" });
   } catch {
     res.status(403).send({ message: "Chưa đăng nhập!" });
-    j;
   }
 });
 
